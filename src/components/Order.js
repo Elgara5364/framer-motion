@@ -1,5 +1,7 @@
 import React from "react";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
+import { useSignal } from "@preact/signals-react";
+import { useSignals } from "@preact/signals-react/runtime";
 
 const containerVariants = {
   hidden: {
@@ -9,6 +11,7 @@ const containerVariants = {
   visible: {
     opacity: 1,
     x: 0,
+
     transition: {
       type: "spring",
       mass: 0.4,
@@ -17,25 +20,45 @@ const containerVariants = {
       staggerChildren: 0.4,
     },
   },
+  exit: {
+    opacity: 0,
+    transition: { ease: "easeInOut" },
+  },
 };
 
 const childVariants = {
   hidden: {
+    // y: 0,
     opacity: 0,
   },
   visible: {
+    // y: -50,
     opacity: 1,
   },
 };
 
 const Order = ({ pizza }) => {
+  const showTitle = useSignal(true);
+  useSignals();
+  console.log(showTitle.value);
   return (
     <motion.div
       variants={containerVariants}
       initial="hidden"
       animate="visible"
+      exit="exit"
       className="container order">
-      <h2>Thank you for your order :)</h2>
+      <AnimatePresence exitBeforeEnter>
+        {setTimeout(() => {
+          showTitle.value = false;
+          console.log(showTitle.value);
+        }, 4000)}
+        {showTitle.value && (
+          <motion.h2 exit={{ opacity: 0 }}>
+            Thank you for your order :)
+          </motion.h2>
+        )}
+      </AnimatePresence>
       <motion.p variants={childVariants}>
         You ordered a {pizza.base} pizza with:
       </motion.p>
