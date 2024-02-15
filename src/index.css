@@ -1,4 +1,8 @@
 /* fonts */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 @font-face {
   font-family: "Quicksand";
   src: url("./../public/Quicksand-Light.woff2") format("woff2"),
